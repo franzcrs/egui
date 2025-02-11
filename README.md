@@ -1,6 +1,6 @@
 # egui
 
-egui crates using tao with modified dependencies, for solving gtk-sys/gtk version conflicts.
+Egui crates using tao with modified dependencies, for solving gtk-sys/gtk version conflicts.
 
 Cargo Build Error:
 ```
