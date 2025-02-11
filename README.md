@@ -1,5 +1,29 @@
 # egui
 
+egui crates using tao with modified dependencies, for solving gtk-sys/gtk version conflicts.
+
+Cargo Build Error:
+```
+    Updating crates.io index
+    Updating git repository `https://github.com/franzcrs/tauri-egui.git`
+error: failed to select a version for `gtk-sys`.
+    ... required by package `gtk v0.16.0`
+    ... which satisfies dependency `gtk = "^0.16"` of package `tao v0.18.0`
+    ... which satisfies dependency `winit = "^0.18.0"` of package `eframe_tao v0.23.0`
+    ... which satisfies dependency `eframe = "^0.23.0"` of package `tauri-egui v0.3.0 (https://github.com/franzcrs/tauri-egui.git?branch=dev-franzcrs#78688412)`
+    ... which satisfies git dependency `tauri-egui` of package `app v0.1.0 (/app_path)`
+versions that meet the requirements `^0.16` are: 0.16.0
+
+the package `gtk-sys` links to the native library `gtk-3`, but it conflicts with a previous package which links to `gtk-3` as well:
+package `gtk-sys v0.18.0`
+    ... which satisfies dependency `ffi = "^0.18"` of package `gtk v0.18.0`
+    ... which satisfies dependency `gtk = "^0.18"` of package `tao v0.23.0`
+    ... which satisfies dependency `tao = "^0.23"` of package `app v0.1.0 (/app_path)`
+Only one package in the dependency graph may specify the same links value. This helps ensure that only one copy of a native library is linked in the final binary. Try to adjust your dependencies so that only one package uses the `links = "gtk-3"` value. For more information, see https://doc.rust-lang.org/cargo/reference/resolver.html#links.
+
+failed to select a version for `gtk-sys` which could resolve this conflict
+```
+
 > egui (pronounced "e-gooey") is a simple, fast, and highly portable immediate mode GUI library for Rust.
 >
 > egui aims to be the easiest-to-use Rust GUI library, and the simplest way to make a web app in Rust.
