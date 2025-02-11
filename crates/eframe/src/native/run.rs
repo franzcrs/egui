@@ -84,7 +84,7 @@ trait WinitApp {
 // fn create_event_loop_builder(
 //     native_options: &mut epi::NativeOptions,
 // ) -> EventLoopBuilder<UserEvent> {
-//     let mut event_loop_builder = winit::event_loop::EventLoopBuilder::with_user_event();
+//     let mut event_loop_builder = winit::event_loop::EventLoopBuilder::<UserEvent>::with_user_event().build();
 
 //     if let Some(hook) = std::mem::take(&mut native_options.event_loop_builder) {
 //         hook(&mut event_loop_builder);
@@ -103,8 +103,9 @@ fn with_event_loop<R>(f: impl FnOnce(&mut EventLoop<UserEvent>) -> R) -> R {
 
     EVENT_LOOP.with(|event_loop| {
         let mut event_loop = event_loop.borrow_mut();
-        let event_loop =
-            event_loop.get_or_insert_with(|| winit::event_loop::EventLoop::with_user_event());
+        let event_loop = event_loop.get_or_insert_with(|| {
+            winit::event_loop::EventLoopBuilder::<UserEvent>::with_user_event().build()
+        });
         f(event_loop)
     })
 }
@@ -1036,7 +1037,8 @@ mod glow_integration {
                 run_and_return(event_loop, glow_eframe)
             })
         } else {
-            let event_loop = winit::event_loop::EventLoop::with_user_event();
+            let event_loop =
+                winit::event_loop::EventLoopBuilder::<UserEvent>::with_user_event().build();
             let glow_eframe = GlowWinitApp::new(&event_loop, app_name, native_options, app_creator);
             run_and_exit(event_loop, glow_eframe);
         }

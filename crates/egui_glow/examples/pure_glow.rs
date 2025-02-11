@@ -145,7 +145,7 @@ impl GlutinWindowContext {
 fn main() {
     let mut clear_color = [0.1, 0.1, 0.1];
 
-    let event_loop = winit::event_loop::EventLoop::with_user_event();
+    let event_loop = winit::event_loop::EventLoopBuilder::<UserEvent>::with_user_event().build();
     let (gl_window, gl) = create_display(&event_loop);
     let gl = std::sync::Arc::new(gl);
 
